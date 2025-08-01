@@ -63,7 +63,7 @@ export function DateRangePicker({
                   setDate(undefined);
                   onChange?.({ from: "", to: "" });
                 }}
-                className="text-muted-foreground absolute right-1"
+                className="text-muted-foreground absolute right-[1px]"
               >
                 <X size={16} />
               </Button>
