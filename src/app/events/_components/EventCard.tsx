@@ -7,7 +7,6 @@ interface EventCardProps {
 }
 
 const EventCard: FC<EventCardProps> = ({ event }) => {
-  console.log(event);
 
   // Price Label
   const ticketCount = event.eventTickets?.length || 0;
