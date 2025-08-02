@@ -2,9 +2,13 @@ import { User } from "@/types/user";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+interface UserStore extends User {
+  accessToken: string;
+}
+
 type Store = {
-  user: User | null;
-  onAuthSuccess: ({ user }: { user: User }) => void;
+  user: UserStore | null;
+  onAuthSuccess: ({ user }: { user: UserStore }) => void;
   clearAuth: () => void;
 };
 

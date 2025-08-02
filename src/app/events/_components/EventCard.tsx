@@ -1,4 +1,5 @@
 import { Event } from "@/types/event";
+import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
 
@@ -42,8 +43,18 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
 
   return (
     <Link href={`/events/${event.slug}`}>
-      <div className="flex h-full flex-col overflow-hidden rounded-md border-1 border-gray-300">
-        <img src={event.thumbnail} alt={event.title} />
+      <div className="flex h-auto flex-col overflow-hidden rounded-md border-1 border-gray-300">
+        {/* <div className="relative overflow-hidden h-[200px]">
+          <img src={event.thumbnail} alt={event.title} />
+        </div> */}
+        <div className="relative h-[160px] w-full overflow-hidden">
+          <Image
+            src={event.thumbnail ?? "/default-avatar.png"}
+            alt={event.title ?? "event-thumbnail"}
+            className="object-cover"
+            fill
+          />
+        </div>
         <div className="flex h-full flex-col justify-between gap-2 px-4 py-2">
           <div>
             <div className="truncate font-bold">{event.title}</div>
