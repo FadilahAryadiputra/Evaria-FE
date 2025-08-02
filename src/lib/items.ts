@@ -1,11 +1,5 @@
 export const categoryItems = [
   {
-    id: "category0",
-    htmlFor: "category0",
-    value: "",
-    label: "All",
-  },
-  {
     id: "category1",
     htmlFor: "category1",
     value: "ANIME",
@@ -38,12 +32,6 @@ export const categoryItems = [
 ] as const
 
 export const locationItems = [
-  {
-    id: "location0",
-    htmlFor: "location0",
-    value: "",
-    label: "All",
-  },
   {
     id: "location1",
     htmlFor: "location1",

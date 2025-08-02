@@ -37,7 +37,6 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Toaster position="top-right" />
-          <Navbar />
           {children}
         </ThemeProvider>
         </ReactQueryProvider>

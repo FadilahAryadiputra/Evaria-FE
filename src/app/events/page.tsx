@@ -15,18 +15,19 @@ import EventCard from "./_components/EventCard";
 import BlogCardSkeleton from "./_components/EventCardSkeleton";
 import useGetEvents from "./_hooks/useGetEvents";
 import { DateRangePicker } from "@/components/DateRangePicker";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   const handleDateChange = (date: { from: string; to: string }) => {
-  if (
-    date.from !== dateRange?.from ||
-    date.to !== dateRange?.to
-  ) {
-    setDateRange(date);
-    console.log(date);
-  }
-};
-  const [dateRange, setDateRange] = useState<{ from: string; to: string } | null>(null);
+    if (date.from !== dateRange?.from || date.to !== dateRange?.to) {
+      setDateRange(date);
+      console.log(date);
+    }
+  };
+  const [dateRange, setDateRange] = useState<{
+    from: string;
+    to: string;
+  } | null>(null);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
@@ -45,6 +46,7 @@ export default function Home() {
   return (
     <>
       <main className="flex-grow">
+        <Navbar />
         <div className="container mx-auto">
           <section className="flex flex-col gap-8 px-4 py-8">
             <div className="overflow-hidden rounded-lg">
@@ -62,6 +64,16 @@ export default function Home() {
                     defaultValue=""
                     onValueChange={(value) => setCategory(value)}
                   >
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem
+                          value=""
+                          id="all"
+                          className="data-[state=checked]:bg-primary h-5 w-5 rounded-[5px] border-1"
+                        />
+                        <Label htmlFor="all">
+                          All
+                        </Label>
+                    </div>
                     {categoryItems.map((category, index) => (
                       <div className="flex items-center gap-3" key={index}>
                         <RadioGroupItem
@@ -82,6 +94,16 @@ export default function Home() {
                     defaultValue=""
                     onValueChange={(value) => setLocation(value)}
                   >
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem
+                          value=""
+                          id="all"
+                          className="data-[state=checked]:bg-primary h-5 w-5 rounded-[5px] border-1"
+                        />
+                        <Label htmlFor="all">
+                          All
+                        </Label>
+                    </div>
                     {locationItems.map((category, index) => (
                       <div className="flex items-center gap-3" key={index}>
                         <RadioGroupItem
@@ -102,7 +124,10 @@ export default function Home() {
                   <div className="flex justify-between">
                     <div className="text-xl font-bold">Newest Event</div>
                     <div className="flex gap-2">
-                      <DateRangePicker onChange={handleDateChange} className="max-w-md" />
+                      <DateRangePicker
+                        onChange={handleDateChange}
+                        className="max-w-md"
+                      />
                       <Input
                         type="text"
                         placeholder="Search..."

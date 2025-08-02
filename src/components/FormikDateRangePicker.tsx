@@ -13,24 +13,25 @@ import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 
-export function DateRangePicker({
+export function FormikDateRangePicker({
   className,
-  onChange,
+  setFieldValue,
+  startDateField = "startDate",
+  endDateField = "endDate",
 }: {
   className?: string;
-  onChange?: (formatted: { from: string; to: string }) => void;
+  setFieldValue: (field: string, value: any) => void;
+  startDateField?: string;
+  endDateField?: string;
 }) {
   const [date, setDate] = React.useState<DateRange | undefined>(undefined);
 
   React.useEffect(() => {
     if (date?.from && date?.to) {
-      const formatted = {
-        from: format(date.from, "yyyy-MM-dd"),
-        to: format(date.to, "yyyy-MM-dd"),
-      };
-      onChange?.(formatted);
+      setFieldValue(startDateField, date.from);
+      setFieldValue(endDateField, date.to);
     }
-  }, [date, onChange]);
+  }, [date, setFieldValue, startDateField, endDateField]);
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -38,11 +39,12 @@ export function DateRangePicker({
         <PopoverTrigger asChild>
           <div className="relative">
             <Button
+            type="button"
               id="date"
               variant={"outline"}
               className={cn(
                 "w-full justify-start text-left font-normal",
-                !date && "text-muted-foreground",
+                !date && "text-muted-foreground"
               )}
             >
               <span className={cn(date?.from && "pr-5")}>
@@ -53,15 +55,15 @@ export function DateRangePicker({
                   : "Pick a date"}
               </span>
             </Button>
-            {/* Clear Button */}
             {date?.from && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={(e) => {
-                  e.stopPropagation(); // Prevent calendar from toggling
+                  e.stopPropagation();
                   setDate(undefined);
-                  onChange?.({ from: "", to: "" });
+                  setFieldValue(startDateField, "");
+                  setFieldValue(endDateField, "");
                 }}
                 className="text-muted-foreground absolute right-[1px]"
               >
