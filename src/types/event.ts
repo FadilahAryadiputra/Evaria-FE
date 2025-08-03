@@ -22,3 +22,16 @@ export interface Event {
   organizer?: Organizer;
   eventTickets?: EventTicket[];
 }
+
+export interface CreateEventFormValues {
+  title: string;
+  category: string;
+  location: string;
+  description: string;
+  content: string;
+  startDate: Date | null;
+  endDate: Date | null;
+  startTime: string;
+  endTime: string;
+  thumbnail: File | null;
+}

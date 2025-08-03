@@ -1,13 +1,12 @@
-import { PaginationMeta } from "@/types/pagination";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
+  PaginationPrevious
+} from "@/components/ui/pagination";
+import { PaginationMeta } from "@/types/pagination";
 
 interface PaginationServiceProps {
   meta: PaginationMeta;

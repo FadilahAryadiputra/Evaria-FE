@@ -1,144 +1,172 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import styles from './page.module.css';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
-import { toast } from 'sonner';
+import { AutoPlayCarousel } from "@/components/AutoplayCarousel";
+
+import Footer from "@/components/Footer";
+import PaginationSection from "@/components/PaginationSection";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { categoryItems, locationItems } from "@/lib/items";
+import { useEffect, useState } from "react";
+import { LuFilter } from "react-icons/lu";
+import { useDebounceValue } from "usehooks-ts";
+import { DateRangePicker } from "@/components/DateRangePicker";
+import Navbar from "@/components/Navbar";
+import useGetEvents from "./events/_hooks/useGetEvents";
+import BlogCardSkeleton from "./events/_components/EventCardSkeleton";
+import EventCard from "./events/_components/EventCard";
 
 export default function Home() {
-  const { setTheme } = useTheme();
+  const handleDateChange = (date: { from: string; to: string }) => {
+    if (date.from !== dateRange?.from || date.to !== dateRange?.to) {
+      setDateRange(date);
+      setPage(1);
+    }
+  };
+  const [dateRange, setDateRange] = useState<{
+    from: string;
+    to: string;
+  } | null>(null);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const [location, setLocation] = useState("");
+  const [page, setPage] = useState(1);
+  const [debounceSearch] = useDebounceValue(search, 1000);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debounceSearch]);
+
+  const { data: events, isPending } = useGetEvents({
+    page,
+    category: category,
+    location: location,
+    search: debounceSearch,
+    startDate: dateRange?.from,
+    endDate: dateRange?.to,
+  });
 
   return (
-    <div className={styles.page}>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant='outline' size='icon'>
-            <Sun className='h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90' />
-            <Moon className='absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0' />
-            <span className='sr-only'>Toggle theme</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
-          <DropdownMenuItem onClick={() => setTheme('light')}>
-            Light
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setTheme('dark')}>
-            Dark
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setTheme('system')}>
-            System
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src='/next.svg'
-          alt='Next.js logo'
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href='https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            <Image
-              className={styles.logo}
-              src='/vercel.svg'
-              alt='Vercel logomark'
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href='https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+    <>
+      <main className="flex-grow">
+        <Navbar />
+        <div className="container mx-auto">
+          <section className="flex flex-col gap-8 px-4 py-8">
+            <div className="overflow-hidden rounded-lg">
+              <AutoPlayCarousel />
+            </div>
+            <div className="flex items-stretch gap-2">
+              <div className="flex flex-2/12 flex-col gap-4">
+                <div className="flex flex-row items-center gap-4 font-bold">
+                  <LuFilter />
+                  <div className="text-xl">Filter</div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="font-semibold">Category</div>
+                  <RadioGroup
+                    defaultValue=""
+                    onValueChange={(value) => {
+                      setCategory(value)
+                      setPage(1);
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem
+                        value=""
+                        id="allCategory"
+                        className="data-[state=checked]:bg-primary h-5 w-5 rounded-[5px] border-1"
+                      />
+                      <Label htmlFor="allCategory">All</Label>
+                    </div>
+                    {categoryItems.map((category, index) => (
+                      <div className="flex items-center gap-3" key={index}>
+                        <RadioGroupItem
+                          value={category.value}
+                          id={category.id}
+                          className="data-[state=checked]:bg-primary h-5 w-5 rounded-[5px] border-1"
+                        />
+                        <Label htmlFor={category.htmlFor}>
+                          {category.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="font-semibold">Location</div>
+                  <RadioGroup
+                    defaultValue=""
+                    onValueChange={(value) => {
+                      setLocation(value)
+                      setPage(1);
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem
+                        value=""
+                        id="allLocation"
+                        className="data-[state=checked]:bg-primary h-5 w-5 rounded-[5px] border-1"
+                      />
+                      <Label htmlFor="allLocation">All</Label>
+                    </div>
+                    {locationItems.map((category, index) => (
+                      <div className="flex items-center gap-3" key={index}>
+                        <RadioGroupItem
+                          value={category.value}
+                          id={category.id}
+                          className="data-[state=checked]:bg-primary h-5 w-5 rounded-[5px] border-1"
+                        />
+                        <Label htmlFor={category.htmlFor}>
+                          {category.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
+              </div>
+              <div className="flex flex-10/12 flex-col justify-between gap-4">
+                <div>
+                  <div className="flex justify-between">
+                    <div className="text-xl font-bold">Newest Event</div>
+                    <div className="flex gap-2">
+                      <DateRangePicker
+                        onChange={handleDateChange}
+                        className="max-w-md"
+                      />
+                      <Input
+                        type="text"
+                        placeholder="Search..."
+                        onChange={(e) => {
+                          setSearch(e.target.value);
+                        }}
+                        className="mb-4 flex w-[400px]"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-4 gap-6">
+                    {isPending && <BlogCardSkeleton count={8} />}
+                    {!isPending && events?.data.length === 0 && (
+                      <div className="col-span-4 text-center text-gray-500">
+                        No events available.
+                      </div>
+                    )}
+                    {events?.data.map((event) => (
+                      <EventCard key={event.id} event={event} />
+                    ))}
+                  </div>
+                </div>
+                {events && (
+                  <div className="mt-12">
+                    <PaginationSection meta={events.meta} setPage={setPage} />
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
         </div>
-        <Button
-          variant={'default'}
-          onClick={() =>
-            toast('Event has been created', {
-              description: 'Sunday, July 26, 2025 at 9:00 AM',
-              action: {
-                label: 'Undo',
-                onClick: () => console.log('Undo'),
-              },
-            })
-          }
-        >
-          Click me
-        </Button>
-        <Button variant={'secondary'}>Click me</Button>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href='https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <Image
-            aria-hidden
-            src='/file.svg'
-            alt='File icon'
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href='https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <Image
-            aria-hidden
-            src='/window.svg'
-            alt='Window icon'
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href='https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <Image
-            aria-hidden
-            src='/globe.svg'
-            alt='Globe icon'
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      <Footer />
+    </>
   );
 }

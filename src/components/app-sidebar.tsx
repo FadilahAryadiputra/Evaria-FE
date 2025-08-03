@@ -1,15 +1,12 @@
 "use client";
 
 import {
-  AudioWaveform,
   BookOpen,
   Bot,
-  Command,
-  GalleryVerticalEnd,
   Moon,
   Settings2,
   SquareTerminal,
-  Sun,
+  Sun
 } from "lucide-react";
 import * as React from "react";
 
@@ -25,8 +22,8 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Button } from "./ui/button";
 import { useTheme } from "next-themes";
+import { Button } from "./ui/button";
 
 // This is sample data.
 const data = {

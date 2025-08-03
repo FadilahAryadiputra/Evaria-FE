@@ -1,5 +1,3 @@
-import { Event } from "./event";
-
 export interface EventTicket {
   id: string;
   title: string;

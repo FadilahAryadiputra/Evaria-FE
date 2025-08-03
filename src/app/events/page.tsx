@@ -67,10 +67,10 @@ export default function Home() {
                     <div className="flex items-center gap-3">
                       <RadioGroupItem
                           value=""
-                          id="all"
+                          id="allCategory"
                           className="data-[state=checked]:bg-primary h-5 w-5 rounded-[5px] border-1"
                         />
-                        <Label htmlFor="all">
+                        <Label htmlFor="allCategory">
                           All
                         </Label>
                     </div>
@@ -97,10 +97,10 @@ export default function Home() {
                     <div className="flex items-center gap-3">
                       <RadioGroupItem
                           value=""
-                          id="all"
+                          id="allLocation"
                           className="data-[state=checked]:bg-primary h-5 w-5 rounded-[5px] border-1"
                         />
-                        <Label htmlFor="all">
+                        <Label htmlFor="allLocation">
                           All
                         </Label>
                     </div>

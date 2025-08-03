@@ -3,13 +3,10 @@ import Image from "next/image";
 import { FC } from "react";
 import { getEvent } from "../_api/get-event";
 
+import Markdown from "@/components/Markdown";
 import { format } from "date-fns";
 import { CalendarDays, Clock, MapPin } from "lucide-react";
-import { IoTicketOutline } from "react-icons/io5";
-import TicketSelector from "./TicketSelector";
-import { Button } from "@/components/ui/button";
 import EventDetails from "./EventDetails";
-import Markdown from "@/components/Markdown";
 
 interface EventBodyProps {
   slug: string;

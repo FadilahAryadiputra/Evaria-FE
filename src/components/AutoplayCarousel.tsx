@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
+import * as React from "react";
 
 import {
   Carousel,
@@ -73,8 +73,8 @@ export function AutoPlayCarousel() {
           ))}
         </CarouselContent>
 
-        <CarouselPrevious className="absolute top-1/2 left-2 z-10 -translate-y-1/2 bg-black text-white border-0" />
-        <CarouselNext className="absolute top-1/2 right-2 z-10 -translate-y-1/2 bg-black text-white border-0" />
+        <CarouselPrevious className="absolute top-1/2 left-2 z-10 -translate-y-1/2 border-0 bg-black text-white" />
+        <CarouselNext className="absolute top-1/2 right-2 z-10 -translate-y-1/2 border-0 bg-black text-white" />
         {/* Dot navigation */}
         <div className="absolute bottom-3 left-4 flex justify-center gap-1">
           {scrollSnaps.map((_, index) => (

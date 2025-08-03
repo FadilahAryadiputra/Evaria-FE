@@ -20,7 +20,7 @@ export function FormikDateRangePicker({
   endDateField = "endDate",
 }: {
   className?: string;
-  setFieldValue: (field: string, value: any) => void;
+  setFieldValue: (field: string, value: string | number | boolean | Date | null) => void;
   startDateField?: string;
   endDateField?: string;
 }) {
