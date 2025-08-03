@@ -11,13 +11,17 @@ interface Payload {
   password: string;
 }
 
+interface LoginResponse extends User {
+  accessToken: string;
+}
+
 const useLogin = () => {
   const router = useRouter();
   const { onAuthSuccess } = useAuthStore();
 
   return useMutation({
     mutationFn: async (payload: Payload) => {
-      const { data } = await axiosInstance.post<User>("/auth/login", payload);
+      const { data } = await axiosInstance.post<LoginResponse>("/auth/login", payload);
       return data;
     },
     onSuccess: (data) => {

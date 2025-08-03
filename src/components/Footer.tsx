@@ -1,14 +1,5 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-
 const Footer = () => {
-  const router = useRouter();
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    toast.success("Form Submitted");
-    router.replace("/");
-  };
+  
   return (
     <footer className="bg-secondary flex flex-col px-4 md:px-34">
       <div className="flex flex-col md:flex-row justify-between py-12">

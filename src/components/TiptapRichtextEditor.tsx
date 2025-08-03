@@ -1,27 +1,31 @@
 "use client";
 
-import { FC } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Label } from "./ui/label";
 import { useFormikContext } from "formik";
 import TiptapMenuBar from "./TiptapMenuBar";
+import { Label } from "./ui/label";
 
-interface TiptapRichtextEditorProps {
+interface TiptapRichtextEditorProps<T> {
   label: string;
-  name: string;
+  name: keyof T & string;
 }
 
-const TiptapRichtextEditor: FC<TiptapRichtextEditorProps> = ({
+const TiptapRichtextEditor = <T,>({
   label,
   name,
-}) => {
-  const { setFieldValue, setFieldTouched, setFieldError, touched, values } =
-    useFormikContext<any>();
+}: TiptapRichtextEditorProps<T>) => {
+  const {
+    setFieldValue,
+    setFieldTouched,
+    setFieldError,
+    touched,
+    values,
+  } = useFormikContext<T>();
 
   const editor = useEditor({
     extensions: [StarterKit],
-    content: values[name],
+    content: values[name] as string,
     editorProps: {
       attributes: {
         class:
@@ -37,8 +41,6 @@ const TiptapRichtextEditor: FC<TiptapRichtextEditorProps> = ({
     onBlur: () => {
       if (editor?.isEmpty) setFieldError(name, `${label} is required`);
     },
-
-    // ✅ Fix hydration issue
     immediatelyRender: false,
   });
 

@@ -8,7 +8,6 @@ interface EventCardProps {
 }
 
 const EventCard: FC<EventCardProps> = ({ event }) => {
-
   // Price Label
   const ticketCount = event.eventTickets?.length || 0;
   const prices = event.eventTickets?.map((ticket) => ticket.price) || [];
@@ -19,11 +18,12 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
   if (ticketCount === 1 && prices[0] !== undefined) {
     priceLabel = (
       <span className="font-bold">Rp{prices[0].toLocaleString()}</span>
-    )
+    );
   } else if (ticketCount > 1) {
     priceLabel = (
       <>
-        Starts from <span className="font-bold">Rp{cheapestPrice?.toLocaleString()}</span>
+        Starts from{" "}
+        <span className="font-bold">Rp{cheapestPrice?.toLocaleString()}</span>
       </>
     );
   }
@@ -62,20 +62,19 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
               {formattedStart}
               {!isSameDay && ` - ${formattedEnd}`}
             </div>
-            <div className="truncate">
-              {priceLabel}
-            </div>
+            <div className="truncate">{priceLabel}</div>
           </div>
           <div className="flex flex-col gap-2">
             <div className="relative flex w-full items-center">
               <div className="flex-grow border-t-1 border-gray-300"></div>
             </div>
             <div className="flex items-center gap-2">
-              <div className="overflow-hidden rounded-full">
-                <img
-                  src={event.organizer?.profilePicture}
-                  alt={event.organizer?.username}
-                  className="h-8 w-8"
+              <div className="relative size-8 overflow-hidden rounded-full">
+                <Image
+                  src={event.organizer?.profilePicture ?? "/default-avatar.png"}
+                  alt={event.organizer?.username ?? "organizer-avatar"}
+                  className="object-cover"
+                  fill
                 />
               </div>
               <div className="truncate">

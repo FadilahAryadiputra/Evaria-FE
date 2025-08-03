@@ -2,12 +2,6 @@
 
 import { AppSidebar } from "@/components/app-sidebar";
 import DynamicBreadcrumbs from "@/components/DynamicBreadcrumbs";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
 import {
   Select,
   SelectContent,
@@ -15,21 +9,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 
-import * as Yup from "yup";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { ChangeEvent, use, useState } from "react";
-import useCreateEvent from "./_hooks/useCreateEvent";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import TiptapRichtextEditor from "@/components/TiptapRichtextEditor";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
 import { FormikDateRangePicker } from "@/components/FormikDateRangePicker";
+import TiptapRichtextEditor from "@/components/TiptapRichtextEditor";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { categoryItems, locationItems } from "@/lib/items";
+import { ErrorMessage, Field, FieldProps, Form, Formik, FormikHelpers } from "formik";
+import { Trash } from "lucide-react";
+import Image from "next/image";
+import { ChangeEvent, useState } from "react";
 import { toast } from "sonner";
+import * as Yup from "yup";
+import useCreateEvent from "./_hooks/useCreateEvent";
+import { CreateEventFormValues } from "@/types/event";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
@@ -56,7 +57,7 @@ export default function Page() {
 
   const onChangeThumbnail = (
     e: ChangeEvent<HTMLInputElement>,
-    setFieldValue: (field: string, value: any) => void,
+    setFieldValue: FormikHelpers<CreateEventFormValues>["setFieldValue"]
   ) => {
     const files = e.target.files;
 
@@ -67,7 +68,7 @@ export default function Page() {
   };
 
   const removeThumbnail = (
-    setFieldValue: (field: string, value: any) => void,
+    setFieldValue: FormikHelpers<CreateEventFormValues>["setFieldValue"]
   ) => {
     setSelectedImage("");
     setFieldValue("thumbnail", null);
@@ -93,7 +94,7 @@ export default function Page() {
           <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min">
             <div className="flex flex-col gap-2">
               <div className="flex gap-4">
-                <Formik
+                <Formik<CreateEventFormValues>
                   initialValues={{
                     title: "",
                     category: "",
@@ -112,7 +113,6 @@ export default function Page() {
                       toast.error("Start and End Date are required");
                       return;
                     }
-
                     const payload = {
                       ...values,
                       startDate: values.startDate as Date,
@@ -120,8 +120,6 @@ export default function Page() {
                       startTime: combineDateAndTime(values.startDate, values.startTime),
                       endTime: combineDateAndTime(values.endDate, values.endTime),
                     };
-
-                    console.log(payload);
                     await createEvent(payload);
                   }}
                 >
@@ -147,7 +145,7 @@ export default function Page() {
                           <div className="flex flex-col gap-2">
                             <Label htmlFor="category">Category</Label>
                             <Field name="category">
-                              {({ field, form }: any) => (
+                              {({ field, form }: FieldProps) => (
                                 <Select
                                   value={field.value}
                                   onValueChange={(value) =>
@@ -179,7 +177,7 @@ export default function Page() {
                           <div className="flex flex-col gap-2">
                             <Label htmlFor="location">Location</Label>
                             <Field name="location">
-                              {({ field, form }: any) => (
+                              {({ field, form }: FieldProps) => (
                                 <Select
                                   value={field.value}
                                   onValueChange={(value) =>

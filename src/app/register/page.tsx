@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader } from "lucide-react";
 import Image from "next/image";
+import Navbar from "@/components/Navbar";
 
 export default function Register() {
   const { mutateAsync: register, isPending } = useRegister();
@@ -33,6 +34,7 @@ export default function Register() {
 
   return (
     <>
+      <Navbar />
       <main className="container mx-auto">
         <div className="mx-0 mt-16 lg:mx-20">
           <div className="my-8 flex justify-center text-2xl font-bold">
@@ -146,7 +148,7 @@ export default function Register() {
                 </Formik>
               </CardContent>
               <CardFooter className="flex-col text-center text-sm">
-                <div className="">By registering, I agree to Evaria's</div>
+                <div className="">By registering, I agree to Evaria&apos;s</div>
                 <div>
                   <span className="font-bold">Terms & Conditions</span> and{" "}
                   <span className="font-bold">Privacy Policy</span>.
