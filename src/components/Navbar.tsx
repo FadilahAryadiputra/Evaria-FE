@@ -53,7 +53,7 @@ const Navbar = () => {
                 Login
               </Link>
               <Link
-                href="/register"
+                href="/register/user"
                 className="hidden text-lg font-medium decoration-2 underline-offset-4 hover:underline md:block"
               >
                 Register

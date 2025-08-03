@@ -10,17 +10,17 @@ interface Payload {
   password: string;
 }
 
-const useRegister = () => {
+const useRegisterUser = () => {
   const router = useRouter();
 
   return useMutation({
     mutationFn: async (payload: Payload) => {
-      const { data } = await axiosInstance.post("/auth/register", payload);
+      const { data } = await axiosInstance.post("/auth/register/user", payload);
       return data;
     },
     onSuccess: () => {
       toast.success("sign up success");
-      router.push("/sign-in");
+      router.push("/login");
     },
     onError: (error: AxiosError<{ message: string }>) => {
       toast.error(error.response?.data.message ?? "Something went wrong!");
@@ -28,4 +28,4 @@ const useRegister = () => {
   });
 };
 
-export default useRegister;
+export default useRegisterUser;
