@@ -2,7 +2,7 @@
 
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import useRegister from "./_hooks/useRegister";
+import useRegister from "../_hooks/useRegisterUser";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -17,9 +17,10 @@ import { Label } from "@/components/ui/label";
 import { Loader } from "lucide-react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import useRegisterUser from "../_hooks/useRegisterUser";
 
 export default function Register() {
-  const { mutateAsync: register, isPending } = useRegister();
+  const { mutateAsync: register, isPending } = useRegisterUser();
 
   const loginSchema = Yup.object().shape({
     username: Yup.string().required("Name is required").min(3),
@@ -30,13 +31,16 @@ export default function Register() {
       .min(8, "Password have minimum 8 characters")
       .max(25, "Password have maximum 25 characters")
       .required("Password is required"),
+    refCode: Yup.string()
+      .min(6, "Referal code have 6 characters")
+      .max(6, "Referal code have 6 characters")
   });
 
   return (
     <>
       <Navbar />
       <main className="container mx-auto">
-        <div className="mx-0 mt-16 lg:mx-20">
+        <div className="mx-0 mt-8 lg:mx-20">
           <div className="my-8 flex justify-center text-2xl font-bold">
             EVARIA
           </div>
@@ -63,29 +67,29 @@ export default function Register() {
           </div>
           <div className="order-1 md:order-2 p-2 flex justify-center md:justify-normal">
             <Card className="shadow-around-xl w-full max-w-sm border-none shadow-[0_0_10px_0px_rgba(0,0,0,0.25)]">
-              <CardHeader className="text-center">
+              <CardHeader className="text-center text-sm">
                 <div className="text-2xl font-bold">Register Now</div>
-                <div className="flex justify-center gap-2">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Already have an account?
-                  </p>
-                  <Link href={"/sign-in"} className="text-sm font-bold">
-                    Sign In
-                  </Link>
+                <div className="flex flex-col">
+                  <div className="">By registering, I agree to Evaria&apos;s</div>
+                  <div>
+                    <span className="font-bold">Terms & Conditions</span> and{" "}
+                    <span className="font-bold">Privacy Policy</span>.
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <Formik
-                  initialValues={{ username: "", email: "", password: "" }}
+                  initialValues={{ username: "", email: "", password: "", refCode: "" }}
                   validateOnBlur={false}
                   validationSchema={loginSchema}
                   onSubmit={async (values) => {
+                    console.log(values)
                     await register(values);
                   }}
                 >
                   <Form>
                     <div className="flex flex-col gap-3">
-                      <div className="grid gap-2">
+                      <div className="flex flex-col gap-2">
                         <Label htmlFor="username">Userame</Label>
                         <Field
                           name="username"
@@ -100,7 +104,7 @@ export default function Register() {
                           className="text-sm text-red-500"
                         />
                       </div>
-                      <div className="grid gap-2">
+                      <div className="flex flex-col gap-2">
                         <Label htmlFor="email">Email Address</Label>
                         <Field
                           name="email"
@@ -115,7 +119,7 @@ export default function Register() {
                           className="text-sm text-red-500"
                         />
                       </div>
-                      <div className="grid gap-2">
+                      <div className="flex flex-col gap-2">
                         <div className="flex items-center">
                           <Label htmlFor="password">Password</Label>
                         </div>
@@ -128,6 +132,24 @@ export default function Register() {
                         />
                         <ErrorMessage
                           name="password"
+                          component="div"
+                          className="text-sm text-red-500"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center">
+                          <Label htmlFor="password">Referral Code (Optional)</Label>
+                        </div>
+                        <Field
+                          name="refCode"
+                          as={Input}
+                          type="text"
+                          maxLength={6}
+                          placeholder="Referral Code"
+                          className="bg-white"
+                        />
+                        <ErrorMessage
+                          name="refCode"
                           component="div"
                           className="text-sm text-red-500"
                         />
@@ -148,10 +170,23 @@ export default function Register() {
                 </Formik>
               </CardContent>
               <CardFooter className="flex-col text-center text-sm">
-                <div className="">By registering, I agree to Evaria&apos;s</div>
-                <div>
-                  <span className="font-bold">Terms & Conditions</span> and{" "}
-                  <span className="font-bold">Privacy Policy</span>.
+                <div className="flex flex-col">
+                  <div className="flex justify-center gap-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Already have an account?
+                    </p>
+                    <Link href={"/login"} className="text-sm font-semibold underline">
+                      Sign In
+                    </Link>
+                  </div>
+                  <div className="flex justify-center gap-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Hosting events?
+                    </p>
+                    <Link href={"/register/organizer"} className="text-sm font-semibold underline">
+                      Join as an Organizer!
+                    </Link>
+                  </div>
                 </div>
               </CardFooter>
             </Card>

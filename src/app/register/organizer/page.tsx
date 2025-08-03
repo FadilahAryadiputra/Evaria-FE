@@ -1,10 +1,10 @@
 "use client";
 
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import useLogin from "./_hooks/useLogin";
 import Link from "next/link";
+import * as Yup from "yup";
 
+import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,12 +16,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader } from "lucide-react";
 import Image from "next/image";
-import Navbar from "@/components/Navbar";
+import useRegisterOrganizer from "../_hooks/useRegisterOrganizer";
 
-export default function Login() {
-  const { mutateAsync: login, isPending } = useLogin();
+export default function Register() {
+  const { mutateAsync: register, isPending } = useRegisterOrganizer();
 
   const loginSchema = Yup.object().shape({
+    username: Yup.string().required("Name is required").min(3),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
@@ -33,9 +34,9 @@ export default function Login() {
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       <main className="container mx-auto">
-        <div className="mx-0 mt-16 lg:mx-20">
+        <div className="mx-0 mt-8 lg:mx-20">
           <div className="my-8 flex justify-center text-2xl font-bold">
             EVARIA
           </div>
@@ -62,28 +63,42 @@ export default function Login() {
           </div>
           <div className="order-1 md:order-2 p-2 flex justify-center md:justify-normal">
             <Card className="shadow-around-xl w-full max-w-sm border-none shadow-[0_0_10px_0px_rgba(0,0,0,0.25)]">
-              <CardHeader className="text-center">
-                <div className="text-2xl font-bold">Login Now</div>
-                <div className="flex justify-center gap-2">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Don&apos;t have an account?
-                  </p>
-                  <Link href={"/register/user"} className="text-sm font-bold underline">
-                    Sign-up
-                  </Link>
+              <CardHeader className="text-center text-sm">
+                <div className="text-2xl font-bold">Register as Organizer</div>
+                <div className="flex flex-col">
+                  <div className="">By registering, I agree to Evaria&apos;s</div>
+                  <div>
+                    <span className="font-bold">Terms & Conditions</span> and{" "}
+                    <span className="font-bold">Privacy Policy</span>.
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <Formik
-                  initialValues={{ email: "", password: "" }}
+                  initialValues={{ username: "", email: "", password: "" }}
                   validateOnBlur={false}
                   validationSchema={loginSchema}
                   onSubmit={async (values) => {
-                    await login(values);
+                    await register(values);
                   }}
                 >
                   <Form>
                     <div className="flex flex-col gap-3">
+                      <div className="grid gap-2">
+                        <Label htmlFor="username">Userame</Label>
+                        <Field
+                          name="username"
+                          as={Input}
+                          type="text"
+                          placeholder="Your Name"
+                          className="bg-white"
+                        />
+                        <ErrorMessage
+                          name="username"
+                          component="div"
+                          className="text-sm text-red-500"
+                        />
+                      </div>
                       <div className="grid gap-2">
                         <Label htmlFor="email">Email Address</Label>
                         <Field
@@ -125,17 +140,22 @@ export default function Login() {
                       {isPending ? (
                         <Loader className="animate-spin" />
                       ) : (
-                        "Login"
+                        "Register"
                       )}
                     </Button>
                   </Form>
                 </Formik>
               </CardContent>
               <CardFooter className="flex-col text-center text-sm">
-                <div className="">By registering, I agree to Evaria&apos;s</div>
-                <div>
-                  <span className="font-bold">Terms & Conditions</span> and{" "}
-                  <span className="font-bold">Privacy Policy</span>.
+                <div className="flex flex-col">
+                  <div className="flex justify-center gap-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Already have an account?
+                    </p>
+                    <Link href={"/login"} className="text-sm font-semibold underline">
+                      Sign In
+                    </Link>
+                  </div>
                 </div>
               </CardFooter>
             </Card>
