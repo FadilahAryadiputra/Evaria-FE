@@ -4,11 +4,19 @@ import { useAuthStore } from "@/stores/auth";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
   const { user, clearAuth } = useAuthStore();
+  const router = useRouter();
+  const handleLogout = () => {
+    clearAuth();
+    toast.success("Logout success");
+    router.push("/login");
+  };
 
   const { setTheme, theme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -40,7 +48,7 @@ const Navbar = () => {
           </Button>
           {user ? (
             <>
-              <Button variant="destructive" onClick={clearAuth}>
+              <Button variant="destructive" onClick={handleLogout}>
                 Logout
               </Button>
             </>
