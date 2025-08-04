@@ -1,10 +1,10 @@
 "use client";
 
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import useRegister from "../_hooks/useRegisterUser";
 import Link from "next/link";
+import * as Yup from "yup";
 
+import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader } from "lucide-react";
 import Image from "next/image";
-import Navbar from "@/components/Navbar";
 import useRegisterUser from "../_hooks/useRegisterUser";
 
 export default function Register() {

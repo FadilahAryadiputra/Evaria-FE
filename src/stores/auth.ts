@@ -19,6 +19,15 @@ export const useAuthStore = create<Store>()(
       onAuthSuccess: ({ user }) => set(() => ({ user })),
       clearAuth: () => set(() => ({ user: null })),
     }),
-    { name: "Evaria" },
+    {
+      name: "Evaria",
+      partialize: (state) => ({
+        user: state.user
+          ? {
+              accessToken: state.user.accessToken,
+            }
+          : null,
+      }),
+    },
   ),
 );

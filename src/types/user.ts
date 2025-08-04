@@ -1,6 +1,6 @@
-enum UserRole {
-  USER,
-  ORGANIZER,
+export enum UserRole {
+  USER = "USER",
+  ORGANIZER = "ORGANIZER",
 }
 
 export interface User {
