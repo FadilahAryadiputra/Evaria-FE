@@ -43,3 +43,12 @@ export interface CreateEventTicketFormValues {
   limit: number;
   eventId: string;
 }
+
+export interface CreateEventVoucherFormValues {
+  code: string;
+  discount: number;
+  quota: number;
+  startDate: Date | null;
+  endDate: Date | null;
+  eventId: string;
+}

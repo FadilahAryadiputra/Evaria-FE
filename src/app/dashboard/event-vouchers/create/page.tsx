@@ -17,28 +17,31 @@ import {
 } from "@/components/ui/sidebar";
 import { axiosInstance } from "@/lib/axios";
 
+import { FormikDateRangePicker } from "@/components/FormikDateRangePicker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { CreateEventTicketFormValues } from "@/types/event";
+import { CreateEventVoucherFormValues } from "@/types/event";
 import { EventTicket } from "@/types/event-ticket";
 import { Organizer } from "@/types/organizer";
 import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
-import useCreateEventTicket from "./_hooks/useCreateTicket";
+import useCreateEventVoucher from "./_hooks/useCreateVoucher";
+import { toast } from "sonner";
 
 const validationSchema = Yup.object().shape({
-  title: Yup.string().required("Title is required"),
-  price: Yup.number()
-    .typeError("Price must be a number")
-    .required("Price is required"),
-  description: Yup.string().required("Description is required"),
-  limit: Yup.number()
-    .typeError("Limit must be a number")
-    .moreThan(0, "Limit must be greater than 0")
-    .required("Limit is required"),
+  code: Yup.string().required("Code is required"),
+  discount: Yup.number()
+    .typeError("Discount must be a number")
+    .moreThan(0, "Discount must be greater than 0")
+    .required("Discount is required"),
+  quota: Yup.number()
+    .typeError("Quota must be a number")
+    .moreThan(0, "Quota must be greater than 0")
+    .required("Quota is required"),
+  startDate: Yup.date().required("Date is required"),
+  endDate: Yup.date().required("End date is required"),
   eventId: Yup.string().required("Event is required"),
 });
 
@@ -63,8 +66,9 @@ type OrganizerEvent = {
   eventTickets?: EventTicket[];
 };
 
-export default function CreateEventTicket() {
-  const { mutateAsync: createEventTicket, isPending } = useCreateEventTicket();
+export default function CreateEventVoucher() {
+  const { mutateAsync: createEventVoucher, isPending } =
+    useCreateEventVoucher();
 
   const [events, setEvents] = useState<OrganizerEvent[]>([]);
 
@@ -100,6 +104,18 @@ export default function CreateEventTicket() {
     getOrganizerEvents();
   }, []);
 
+  const generateRandomCode = (length = 8) => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let result = "";
+
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters[randomIndex];
+    }
+
+    return result;
+  };
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -118,22 +134,29 @@ export default function CreateEventTicket() {
           <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min">
             <div className="flex flex-col gap-2">
               <div className="flex gap-4">
-                <Formik<CreateEventTicketFormValues>
+                <Formik<CreateEventVoucherFormValues>
                   initialValues={{
-                    title: "",
-                    price: 0,
-                    description: "",
-                    limit: 0,
+                    code: "",
+                    discount: 0,
+                    quota: 0,
+                    startDate: null,
+                    endDate: null,
                     eventId: "",
                   }}
                   validationSchema={validationSchema}
                   onSubmit={async (values) => {
+                    if (!values.startDate || !values.endDate) {
+                      toast.error("Start and end date are required");
+                      return;
+                    }
                     const payload = {
                       ...values,
-                      price: Number(values.price),
-                      limit: Number(values.limit),
+                      discount: Number(values.discount),
+                      quota: Number(values.quota),
+                      startDate: values.startDate as Date,
+                      endDate: values.endDate as Date,
                     };
-                    await createEventTicket(payload);
+                    await createEventVoucher(payload);
                   }}
                 >
                   {({ values, setFieldValue }) => (
@@ -142,91 +165,7 @@ export default function CreateEventTicket() {
                         Create Event Ticket
                       </div>
                       <div className="flex gap-4">
-                        <div className="flex w-full flex-col gap-2">
-                          <div className="flex flex-col gap-2">
-                            <Label htmlFor="title">Title</Label>
-                            <Field
-                              name="title"
-                              as={Input}
-                              type="text"
-                              placeholder="Title"
-                            />
-                            <ErrorMessage
-                              name="title"
-                              component="p"
-                              className="text-sm text-red-500"
-                            />
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            <Label htmlFor="price">Price</Label>
-                            <Field
-                              as={Input}
-                              name="price"
-                              type="number"
-                              inputMode="numeric"
-                              maxLength={9}
-                              onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>,
-                              ) => {
-                                let value = e.target.value;
-                                if (value === "") {
-                                  setFieldValue("price", value);
-                                  return;
-                                }
-                                if (/^\d+$/.test(value)) {
-                                  if (
-                                    value.length > 1 &&
-                                    value.startsWith("0")
-                                  ) {
-                                    value = value.replace(/^0+/, "");
-                                  }
-                                  setFieldValue("price", value);
-                                }
-                              }}
-                              value={values.price}
-                            />
-                            <ErrorMessage
-                              name="price"
-                              component="p"
-                              className="text-sm text-red-500"
-                            />
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            <Label htmlFor="limit">Limit</Label>
-                            <Field
-                              as={Input}
-                              name="limit"
-                              type="number"
-                              inputMode="numeric"
-                              maxLength={9}
-                              onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>,
-                              ) => {
-                                let value = e.target.value;
-                                if (value === "") {
-                                  setFieldValue("limit", value);
-                                  return;
-                                }
-                                if (/^\d+$/.test(value)) {
-                                  if (
-                                    value.length > 1 &&
-                                    value.startsWith("0")
-                                  ) {
-                                    value = value.replace(/^0+/, "");
-                                  }
-                                  setFieldValue("limit", value);
-                                }
-                              }}
-                              value={values.limit}
-                            />
-                            <ErrorMessage
-                              name="limit"
-                              component="p"
-                              className="text-sm text-red-500"
-                            />
-                          </div>
-                        </div>
-                        <div className="flex w-full flex-col gap-2">
+                        <div className="flex w-full flex-col gap-4">
                           <div className="flex flex-col gap-2">
                             <Label htmlFor="eventId">Event</Label>
                             <Field name="eventId">
@@ -263,15 +202,111 @@ export default function CreateEventTicket() {
                             />
                           </div>
                           <div className="flex flex-col gap-2">
-                            <Label htmlFor="description">Description</Label>
-                            <Field
-                              name="description"
-                              as={Textarea}
-                              type="text"
-                              placeholder="Description"
+                            <Label htmlFor="code">Code</Label>
+                            <div className="flex gap-2">
+                              <div className="flex w-full flex-col gap-2">
+                                <Field
+                                  name="code"
+                                  as={Input}
+                                  type="text"
+                                  placeholder="Code"
+                                />
+                                <ErrorMessage
+                                  name="code"
+                                  component="p"
+                                  className="text-sm text-red-500"
+                                />
+                              </div>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => {
+                                  const newCode = generateRandomCode();
+                                  setFieldValue("code", newCode);
+                                }}
+                              >
+                                Generate
+                              </Button>
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <Label htmlFor="startDate">Select date range</Label>
+                            <FormikDateRangePicker
+                              setFieldValue={setFieldValue}
+                              className="w-full"
                             />
                             <ErrorMessage
-                              name="description"
+                              name="startDate"
+                              component="p"
+                              className="text-sm text-red-500"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex w-full flex-col gap-4">
+                          <div className="flex flex-col gap-2">
+                            <Label htmlFor="discount">Discont value</Label>
+                            <Field
+                              as={Input}
+                              name="discount"
+                              type="number"
+                              inputMode="numeric"
+                              maxLength={9}
+                              onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>,
+                              ) => {
+                                let value = e.target.value;
+                                if (value === "") {
+                                  setFieldValue("discount", value);
+                                  return;
+                                }
+                                if (/^\d+$/.test(value)) {
+                                  if (
+                                    value.length > 1 &&
+                                    value.startsWith("0")
+                                  ) {
+                                    value = value.replace(/^0+/, "");
+                                  }
+                                  setFieldValue("discount", value);
+                                }
+                              }}
+                              value={values.discount}
+                            />
+                            <ErrorMessage
+                              name="discount"
+                              component="p"
+                              className="text-sm text-red-500"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <Label htmlFor="quota">Limit</Label>
+                            <Field
+                              as={Input}
+                              name="quota"
+                              type="number"
+                              inputMode="numeric"
+                              maxLength={9}
+                              onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>,
+                              ) => {
+                                let value = e.target.value;
+                                if (value === "") {
+                                  setFieldValue("quota", value);
+                                  return;
+                                }
+                                if (/^\d+$/.test(value)) {
+                                  if (
+                                    value.length > 1 &&
+                                    value.startsWith("0")
+                                  ) {
+                                    value = value.replace(/^0+/, "");
+                                  }
+                                  setFieldValue("quota", value);
+                                }
+                              }}
+                              value={values.quota}
+                            />
+                            <ErrorMessage
+                              name="quota"
                               component="p"
                               className="text-sm text-red-500"
                             />
