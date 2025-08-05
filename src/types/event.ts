@@ -35,3 +35,11 @@ export interface CreateEventFormValues {
   endTime: string;
   thumbnail: File | null;
 }
+
+export interface CreateEventTicketFormValues {
+  title: string;
+  price: number;
+  description: string;
+  limit: number;
+  eventId: string;
+}

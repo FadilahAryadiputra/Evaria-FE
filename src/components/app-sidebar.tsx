@@ -47,12 +47,12 @@ const data = {
     },
     {
       title: "Tickets",
-      url: "#",
+      url: "/dashboard/event-tickets",
       icon: Bot,
       items: [
         {
           title: "Create Ticket",
-          url: "#",
+          url: "/dashboard/event-tickets/create",
         },
       ],
     },
