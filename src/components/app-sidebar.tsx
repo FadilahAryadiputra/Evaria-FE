@@ -30,7 +30,7 @@ const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "https://res.cloudinary.com/dfm5iyef8/image/upload/v1753673109/evidence/kyie6dpmh3aje6ncmsie.jpg",
   },
   navMain: [
     {
@@ -49,6 +49,7 @@ const data = {
       title: "Tickets",
       url: "/dashboard/event-tickets",
       icon: Bot,
+      isActive: true,
       items: [
         {
           title: "Create Ticket",
@@ -58,12 +59,13 @@ const data = {
     },
     {
       title: "Vouchers",
-      url: "#",
+      url: "/dashboard/event-vouchers",
       icon: BookOpen,
+      isActive: true,
       items: [
         {
           title: "Create Voucher",
-          url: "#",
+          url: "/dashboard/event-vouchers/create",
         },
       ],
     },
@@ -71,6 +73,7 @@ const data = {
       title: "Settings",
       url: "#",
       icon: Settings2,
+      isActive: true,
       items: [
         {
           title: "Change Password",
