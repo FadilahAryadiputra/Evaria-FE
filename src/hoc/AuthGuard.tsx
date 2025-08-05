@@ -6,9 +6,10 @@ import { UserRole } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import React from "react";
 
-export const AuthGuard = (Component: any) => {
-  return (props: any) => {
+export function AuthGuard<P extends Record<string, unknown>>(Component: React.ComponentType<P>) {
+  const WrappedComponent = (props: P) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(false);
@@ -19,7 +20,7 @@ export const AuthGuard = (Component: any) => {
         const token = raw ? JSON.parse(raw).state?.user?.accessToken : null;
 
         if (!token) {
-          toast.error("No token provided")
+          toast.error("No token provided");
           router.push("/login");
           return;
         }
@@ -56,4 +57,9 @@ export const AuthGuard = (Component: any) => {
 
     return isAuthorized ? <Component {...props} /> : null;
   };
-};
+
+  // 🧩 Set displayName for better debugging and linting
+  WrappedComponent.displayName = `AuthGuard(${Component.displayName || Component.name || "Component"})`;
+
+  return WrappedComponent;
+}
