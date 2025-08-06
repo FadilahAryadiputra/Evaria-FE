@@ -81,6 +81,12 @@ const Navbar = () => {
             </Button>
           )}
 
+          {mounted && role === UserRole.USER && (
+            <Link href="/transactions">
+              <Button variant="outline">Transactions</Button>
+            </Link>
+          )}
+
           {mounted && role === UserRole.ORGANIZER && (
             <Link href="/dashboard">
               <Button variant="outline">Dashboard</Button>

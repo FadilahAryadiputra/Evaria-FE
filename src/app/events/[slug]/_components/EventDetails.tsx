@@ -1,8 +1,10 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { FC, useState } from "react";
 import { IoTicketOutline } from "react-icons/io5";
-import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import useCreateTransaction from "../../_hooks/useCreateTransaction";
 import TicketSelector from "./TicketSelector";
 
 interface Ticket {
@@ -18,7 +20,9 @@ interface EventDetailsClientProps {
 }
 
 const EventDetails: FC<EventDetailsClientProps> = ({ eventTickets }) => {
-  const [quantities, setQuantities] = useState<{ [ticketId: string]: number }>({});
+  const [quantities, setQuantities] = useState<{ [ticketId: string]: number }>(
+    {},
+  );
 
   const updateQuantity = (ticketId: string, quantity: number) => {
     setQuantities((prev) => ({
@@ -40,6 +44,8 @@ const EventDetails: FC<EventDetailsClientProps> = ({ eventTickets }) => {
 
   const hasSelection = Object.values(quantities).some((qty) => qty > 0);
 
+  const { mutateAsync: createTransaction } = useCreateTransaction();
+
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -57,8 +63,8 @@ const EventDetails: FC<EventDetailsClientProps> = ({ eventTickets }) => {
         )}
       </div>
 
-      <div className="flex flex-col gap-4 rounded-md border-1 border-gray-300 py-4 mt-8">
-        <div className="mx-6 flex gap-4 items-center">
+      <div className="mt-8 flex flex-col gap-4 rounded-md border-1 border-gray-300 py-4">
+        <div className="mx-6 flex items-center gap-4">
           <div className="flex flex-1/12 items-center justify-center">
             <IoTicketOutline className="text-3xl" />
           </div>
@@ -75,7 +81,33 @@ const EventDetails: FC<EventDetailsClientProps> = ({ eventTickets }) => {
           <div>Total price</div>
           <div>{formattedPrice}</div>
         </div>
-        <Button className="mx-4 mt-2">Checkout</Button>
+        <Button
+          className="mx-4 mt-2"
+          onClick={async () => {
+            const selectedTicket = Object.entries(quantities).find(
+              ([, qty]) => qty > 0,
+            );
+
+            if (!selectedTicket) {
+              toast.error("Please select at least one ticket.");
+              return;
+            }
+
+            const [eventTicketId, quantity] = selectedTicket;
+
+            try {
+              await createTransaction({
+                quantity,
+                pointUsed: 0, // You can later allow user to input this
+                eventTicketId,
+              });
+            } catch (err) {
+              console.error(err);
+            }
+          }}
+        >
+          Checkout
+        </Button>
       </div>
     </>
   );

@@ -1,11 +1,11 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { FC } from "react";
 
-interface EventCardSkeletonProps {
+interface TransactionCardSkeletonProps {
   count: number;
 }
 
-const EventCardSkeleton: FC<EventCardSkeletonProps> = ({ count }) => {
+const TransactionCardSkeleton: FC<TransactionCardSkeletonProps> = ({ count }) => {
   return (
     <>
       {Array.from({ length: count }).map((_, idx) => (
@@ -23,4 +23,4 @@ const EventCardSkeleton: FC<EventCardSkeletonProps> = ({ count }) => {
   );
 };
 
-export default EventCardSkeleton;
+export default TransactionCardSkeleton;
