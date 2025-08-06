@@ -7,6 +7,7 @@ import {
   Settings2,
   SquareTerminal,
   Sun,
+  Ticket,
 } from "lucide-react";
 import * as React from "react";
 
@@ -67,6 +68,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         "https://res.cloudinary.com/dfm5iyef8/image/upload/v1753673109/evidence/kyie6dpmh3aje6ncmsie.jpg",
     },
     navMain: [
+      {
+        title: "Orders",
+        url: "/dashboard/transactions",
+        icon: Ticket,
+        isActive: true,
+        items: [
+          {
+            title: "Transactions",
+            url: "#",
+          },
+        ],
+      },
       {
         title: "All Events",
         url: "/dashboard/events",
