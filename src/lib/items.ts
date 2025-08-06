@@ -29,6 +29,24 @@ export const categoryItems = [
     value: "THEATRE",
     label: "Theatre",
   },
+  {
+    id: "category6",
+    htmlFor: "category6",
+    value: "TALKSHOW",
+    label: "Talkshow",
+  },
+  {
+    id: "category7",
+    htmlFor: "category7",
+    value: "WEBINAR",
+    label: "Webinar",
+  },
+  {
+    id: "category8",
+    htmlFor: "category8",
+    value: "FASHION",
+    label: "Fashion",
+  },
 ] as const
 
 export const locationItems = [
@@ -47,20 +65,50 @@ export const locationItems = [
   {
     id: "location3",
     htmlFor: "location3",
-    value: "BANDUNG",
-    label: "Bandung",
+    value: "TANGERANG",
+    label: "Tangerang",
   },
   {
     id: "location4",
     htmlFor: "location4",
-    value: "SURABAYA",
-    label: "Surabaya",
+    value: "BANDUNG",
+    label: "Bandung",
   },
   {
     id: "location5",
     htmlFor: "location5",
     value: "YOGYAKARTA",
     label: "Yogyakarta",
+  },
+  {
+    id: "location6",
+    htmlFor: "location6",
+    value: "SURABAYA",
+    label: "Surabaya",
+  },
+  {
+    id: "location7",
+    htmlFor: "location7",
+    value: "SEMARANG",
+    label: "Semarang",
+  },
+  {
+    id: "location8",
+    htmlFor: "location8",
+    value: "MALANG",
+    label: "Malang",
+  },
+  {
+    id: "location9",
+    htmlFor: "location9",
+    value: "KEDIRI",
+    label: "Kediri",
+  },
+  {
+    id: "location10",
+    htmlFor: "location10",
+    value: "PURWOKERTO",
+    label: "Purwokerto",
   },
 ] as const
 

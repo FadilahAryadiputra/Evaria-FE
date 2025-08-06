@@ -43,14 +43,18 @@ const EventDetails: FC<EventDetailsClientProps> = ({ eventTickets }) => {
   return (
     <>
       <div className="flex flex-col gap-4">
-        {eventTickets.map((ticket) => (
-          <TicketSelector
-            key={ticket.id}
-            ticket={ticket}
-            quantity={quantities[ticket.id] || 0}
-            setQuantity={(qty) => updateQuantity(ticket.id, qty)}
-          />
-        ))}
+        {eventTickets.length === 0 ? (
+          <div className="text-center text-gray-400">No tickets available.</div>
+        ) : (
+          eventTickets.map((ticket) => (
+            <TicketSelector
+              key={ticket.id}
+              ticket={ticket}
+              quantity={quantities[ticket.id] || 0}
+              setQuantity={(qty) => updateQuantity(ticket.id, qty)}
+            />
+          ))
+        )}
       </div>
 
       <div className="flex flex-col gap-4 rounded-md border-1 border-gray-300 py-4 mt-8">

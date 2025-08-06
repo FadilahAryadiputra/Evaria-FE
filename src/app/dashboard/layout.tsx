@@ -1,8 +1,9 @@
 "use client";
 
-import { AuthGuard } from "@/hoc/AuthGuard";
+import { DashboardAuthGuard } from "@/hoc/DashboardAuthGuard";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const Guarded = AuthGuard(() => <>{children}</>);
+  const Guarded = (() => <>{children}</>);
+  // const Guarded = DashboardAuthGuard(() => <>{children}</>);
   return <Guarded />;
 }

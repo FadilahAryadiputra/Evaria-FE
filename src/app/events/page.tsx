@@ -122,7 +122,7 @@ export default function Home() {
               <div className="flex flex-10/12 flex-col justify-between gap-4">
                 <div>
                   <div className="flex justify-between">
-                    <div className="text-xl font-bold">Newest Event</div>
+                    <div className="text-md md:text-xl font-semibold md:font-bold">Newest Event</div>
                     <div className="flex gap-2">
                       <DateRangePicker
                         onChange={handleDateChange}

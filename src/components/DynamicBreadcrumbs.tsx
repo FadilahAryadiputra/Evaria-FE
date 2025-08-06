@@ -20,9 +20,10 @@ function formatSegment(segment: string) {
 
 export default function DynamicBreadcrumbs() {
   const pathname = usePathname()
-  const segments = pathname.split("/").filter(Boolean)
+  const rawSegments = pathname.split("/").filter(Boolean)
 
-  const pathArray = segments.map((_, index) => "/" + segments.slice(0, index + 1).join("/"))
+  const segments = ["home", ...rawSegments]
+  const pathArray = ["/", ...rawSegments.map((_, index) => "/" + rawSegments.slice(0, index + 1).join("/"))]
 
   return (
     <Breadcrumb>

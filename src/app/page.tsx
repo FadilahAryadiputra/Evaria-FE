@@ -57,7 +57,7 @@ export default function Home() {
               <AutoPlayCarousel />
             </div>
             <div className="flex items-stretch gap-2">
-              <div className="flex flex-2/12 flex-col gap-4">
+              <div className="hidden md:block flex-2/12 flex-col gap-4">
                 <div className="flex flex-row items-center gap-4 font-bold">
                   <LuFilter />
                   <div className="text-xl">Filter</div>
@@ -127,9 +127,9 @@ export default function Home() {
               </div>
               <div className="flex flex-10/12 flex-col justify-between gap-4">
                 <div>
-                  <div className="flex justify-between">
-                    <div className="text-xl font-bold">Newest Event</div>
-                    <div className="flex gap-2">
+                  <div className="flex justify-end sm:justify-between items-center mb-4">
+                    <div className="hidden sm:block text-lg md:text-xl font-bold">Newest Event</div>
+                    <div className="flex items-center gap-2">
                       <DateRangePicker
                         onChange={handleDateChange}
                         className="max-w-md"
@@ -140,11 +140,11 @@ export default function Home() {
                         onChange={(e) => {
                           setSearch(e.target.value);
                         }}
-                        className="mb-4 flex w-[400px]"
+                        className="flex items-center md:w-[200px] lg:w-[400px]"
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-4 gap-6">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                     {isPending && <BlogCardSkeleton count={8} />}
                     {!isPending && events?.data.length === 0 && (
                       <div className="col-span-4 text-center text-gray-500">
