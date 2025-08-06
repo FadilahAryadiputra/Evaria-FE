@@ -141,7 +141,7 @@ export default function CreateEventTicket() {
                       <div className="text-2xl font-bold">
                         Create Event Ticket
                       </div>
-                      <div className="flex gap-4">
+                      <div className="flex flex-col sm:flex-row gap-4">
                         <div className="flex w-full flex-col gap-2">
                           <div className="flex flex-col gap-2">
                             <Label htmlFor="title">Title</Label>

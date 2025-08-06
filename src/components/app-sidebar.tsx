@@ -6,7 +6,7 @@ import {
   Moon,
   Settings2,
   SquareTerminal,
-  Sun
+  Sun,
 } from "lucide-react";
 import * as React from "react";
 
@@ -24,72 +24,99 @@ import {
 } from "@/components/ui/sidebar";
 import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
-
-// This is sample data.
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "https://res.cloudinary.com/dfm5iyef8/image/upload/v1753673109/evidence/kyie6dpmh3aje6ncmsie.jpg",
-  },
-  navMain: [
-    {
-      title: "All Events",
-      url: "/dashboard/events",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "Create Event",
-          url: "/dashboard/events/create",
-        },
-      ],
-    },
-    {
-      title: "Tickets",
-      url: "/dashboard/event-tickets",
-      icon: Bot,
-      isActive: true,
-      items: [
-        {
-          title: "Create Ticket",
-          url: "/dashboard/event-tickets/create",
-        },
-      ],
-    },
-    {
-      title: "Vouchers",
-      url: "/dashboard/event-vouchers",
-      icon: BookOpen,
-      isActive: true,
-      items: [
-        {
-          title: "Create Voucher",
-          url: "/dashboard/event-vouchers/create",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      isActive: true,
-      items: [
-        {
-          title: "Change Password",
-          url: "#",
-        },
-      ],
-    },
-  ],
-};
+import { axiosInstance } from "@/lib/axios";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const { setTheme, theme } = useTheme();
-    const [mounted, setMounted] = React.useState(false);
-  
-    React.useEffect(() => setMounted(true), []);
-    if (!mounted) return null;
+  const { setTheme, theme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+  const [username, setUsername] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    setMounted(true);
+
+    const fetchUser = async () => {
+      try {
+        const raw = localStorage.getItem("Evaria");
+        const token = raw ? JSON.parse(raw).state?.user?.accessToken : null;
+
+        if (!token) return;
+
+        const response = await axiosInstance.get("/auth/session-login", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const name = response.data?.data?.name;
+        setUsername(name);
+      } catch (error) {
+        console.error("Error verifying token:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (!mounted) return null;
+
+  const data = {
+    user: {
+      name: username || "Loading...",
+      email: "",
+      avatar:
+        "https://res.cloudinary.com/dfm5iyef8/image/upload/v1753673109/evidence/kyie6dpmh3aje6ncmsie.jpg",
+    },
+    navMain: [
+      {
+        title: "All Events",
+        url: "/dashboard/events",
+        icon: SquareTerminal,
+        isActive: true,
+        items: [
+          {
+            title: "Create Event",
+            url: "/dashboard/events/create",
+          },
+        ],
+      },
+      {
+        title: "Tickets",
+        url: "/dashboard/event-tickets",
+        icon: Bot,
+        isActive: true,
+        items: [
+          {
+            title: "Create Ticket",
+            url: "/dashboard/event-tickets/create",
+          },
+        ],
+      },
+      {
+        title: "Vouchers",
+        url: "/dashboard/event-vouchers",
+        icon: BookOpen,
+        isActive: true,
+        items: [
+          {
+            title: "Create Voucher",
+            url: "/dashboard/event-vouchers/create",
+          },
+        ],
+      },
+      {
+        title: "Settings",
+        url: "#",
+        icon: Settings2,
+        isActive: true,
+        items: [
+          {
+            title: "Change Password",
+            url: "#",
+          },
+        ],
+      },
+    ],
+  };
 
   return (
     <Sidebar collapsible="icon" {...props}>

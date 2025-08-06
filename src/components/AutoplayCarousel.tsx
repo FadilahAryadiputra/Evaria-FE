@@ -30,19 +30,19 @@ export function AutoPlayCarousel() {
 
   const images = [
     {
-      url: "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/event-ticket-design-template-7790ce89f17c9b72dead3b8551c88142_screen.jpg?ts=1698308471",
+      url: "https://res.cloudinary.com/dfm5iyef8/image/upload/v1754399251/6074010_lm2lcx.jpg",
     },
     {
-      url: "https://thumbs.dreamstime.com/b/gift-voucher-discount-sale-flyer-box-promotion-ticket-special-offer-customer-certificate-shopping-card-birthday-prize-306187779.jpg",
+      url: "https://res.cloudinary.com/dfm5iyef8/image/upload/v1754399247/8441302_mx1cil.jpg",
     },
     {
-      url: "https://thumbs.dreamstime.com/b/shopping-day-sale-banner-template-design-abstract-red-geometric-pixel-labels-sign-promotion-every-month-numbers-condensed-font-332835337.jpg",
+      url: "https://res.cloudinary.com/dfm5iyef8/image/upload/v1754399182/Screenshot_2025-08-05_195656_lo1wnt.jpg",
     },
     {
-      url: "https://www.bca.co.id/-/media/Feature/Promo/Page/2024/10/20241028-promo-3-jdf-2024-BANNER.png?v=1",
+      url: "https://res.cloudinary.com/dfm5iyef8/image/upload/v1754399444/Screenshot_2025-08-05_194837_o01fgg.jpg",
     },
     {
-      url: "https://static.vecteezy.com/system/resources/thumbnails/059/554/946/small/colorful-vintage-circus-horizontal-advertising-banner-design-for-promotion-of-events-creation-of-posters-invitations-tickets-and-more-retro-illustration-free-vector.jpg",
+      url: "https://res.cloudinary.com/dfm5iyef8/image/upload/v1754399237/7494743_g7vmfu.jpg",
     },
   ];
 
@@ -60,14 +60,14 @@ export function AutoPlayCarousel() {
           {images.map((content, index) => (
             <CarouselItem
               key={index}
-              className="flex h-72 items-center justify-center bg-neutral-900 text-4xl font-bold text-white"
+              className="relative h-80 w-full basis-full overflow-hidden"
             >
               <img
                 src={content.url}
                 alt="hero-image"
                 width={1600}
                 height={1600}
-                className="object-fill"
+                className="h-full w-full object-cover"
               />
             </CarouselItem>
           ))}

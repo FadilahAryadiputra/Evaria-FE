@@ -24,7 +24,7 @@ const EventBody: FC<EventBodyProps> = async ({ slug }) => {
 
   return (
     <section className="my-8">
-      <div className="grid grid-cols-3 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="flex flex-col gap-2">
           <div className="relative h-[400px] overflow-hidden rounded-md">
             <Image
@@ -33,10 +33,10 @@ const EventBody: FC<EventBodyProps> = async ({ slug }) => {
               className="object-cover"
               fill
             />
-          </div>
-          <div className="flex justify-end">
-            <div className="bg-primary text-secondary rounded-lg px-3">
-              {event.category}
+            <div className="absolute bottom-3 right-3">
+              <div className="bg-primary rounded-lg px-3 font-semibold text-white dark:text-white">
+                {event.category}
+              </div>
             </div>
           </div>
         </div>
@@ -90,7 +90,7 @@ const EventBody: FC<EventBodyProps> = async ({ slug }) => {
           </Tabs>
         </div>
         <div className="flex flex-col gap-2">
-          <div className="font-semibold text-lg">Select ticket :</div>
+          <div className="text-lg font-semibold">Select ticket :</div>
           <EventDetails eventTickets={event.eventTickets ?? []} />
         </div>
       </div>

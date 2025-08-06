@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import React from "react";
 
-export function AuthGuard<P extends Record<string, unknown>>(Component: React.ComponentType<P>) {
+export function DashboardAuthGuard<P extends Record<string, unknown>>(Component: React.ComponentType<P>) {
   const WrappedComponent = (props: P) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
@@ -58,7 +58,6 @@ export function AuthGuard<P extends Record<string, unknown>>(Component: React.Co
     return isAuthorized ? <Component {...props} /> : null;
   };
 
-  // 🧩 Set displayName for better debugging and linting
   WrappedComponent.displayName = `AuthGuard(${Component.displayName || Component.name || "Component"})`;
 
   return WrappedComponent;

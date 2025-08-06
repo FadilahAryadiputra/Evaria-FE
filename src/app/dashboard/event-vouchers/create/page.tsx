@@ -162,9 +162,9 @@ export default function CreateEventVoucher() {
                   {({ values, setFieldValue }) => (
                     <Form className="flex w-full flex-col gap-2 space-y-4 p-4">
                       <div className="text-2xl font-bold">
-                        Create Event Ticket
+                        Create Voucher
                       </div>
-                      <div className="flex gap-4">
+                      <div className="flex flex-col sm:flex-row gap-4">
                         <div className="flex w-full flex-col gap-4">
                           <div className="flex flex-col gap-2">
                             <Label htmlFor="eventId">Event</Label>
