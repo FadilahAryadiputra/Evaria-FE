@@ -120,7 +120,7 @@ const TransactionBody: FC<TransactionBodyProps> = ({ transaction }) => {
         </div>
         <div className="flex flex-col gap-6">
           {transaction.status === "WAITING_FOR_CONFIRMATION" && (
-            <div className="text-secondary flex items-center justify-center gap-2 rounded-md bg-purple-300 px-4 py-2">
+            <div className="text-foreground flex items-center justify-center gap-2 rounded-md bg-purple-300 px-4 py-2">
               <ClockAlert className="size-[38px]" />
               <div className="flex flex-col font-semibold">
                 Please wait while the admin confirms your payment.

@@ -7,15 +7,18 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import React from "react";
+import { useAuthStore } from "@/stores/auth";
 
 export function DashboardAuthGuard<P extends Record<string, unknown>>(Component: React.ComponentType<P>) {
   const WrappedComponent = (props: P) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(false);
+    const { user } = useAuthStore();
 
     useEffect(() => {
       const verifyToken = async () => {
+        if (!user) return;
         const raw = localStorage.getItem("Evaria");
         const token = raw ? JSON.parse(raw).state?.user?.accessToken : null;
 
