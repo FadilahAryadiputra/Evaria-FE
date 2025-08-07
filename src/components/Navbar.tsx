@@ -29,6 +29,7 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
+    if (!user) return;
     const verifyToken = async () => {
       const raw = localStorage.getItem("Evaria");
       const token = raw ? JSON.parse(raw).state?.user?.accessToken : null;
